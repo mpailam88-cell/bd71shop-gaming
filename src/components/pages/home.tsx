@@ -424,7 +424,7 @@ export function HomePage({ serverData }: { serverData?: any }) {
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-            {deals.map((product, i) => (
+            {realDeals.map((product, i) => (
               <ProductCard key={product.id} product={product} index={i} />
             ))}
           </div>
@@ -496,7 +496,7 @@ export function HomePage({ serverData }: { serverData?: any }) {
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 sm:gap-5 gap-3">
-            {popular.map((product, i) => (
+            {(popular.length > 0 ? popular : products.slice(8, 12)).map((product, i) => (
               <ProductCard key={product.id} product={product} index={i} />
             ))}
             {popular.length < 4 && bestsellers.slice(0, 4 - popular.length).map((product, i) => (
@@ -531,7 +531,7 @@ export function HomePage({ serverData }: { serverData?: any }) {
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 sm:gap-5 gap-3">
-            {bestsellers.slice(0, 4).map((product, i) => (
+            {(bestsellers.length > 0 ? bestsellers : products.slice(12, 16)).map((product, i) => (
               <ProductCard key={product.id} product={product} index={i} />
             ))}
           </div>
