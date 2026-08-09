@@ -15,7 +15,7 @@ import type { Product, BlogPost } from "@/lib/data";
 import { stripSchemaMarkup } from "@/lib/clean-description";
 
 const CMS_API = process.env.NEXT_PUBLIC_CMS_API_URL ?? "https://cms-lac-two.vercel.app";
-const CMS_SITE_ID = process.env.NEXT_PUBLIC_CMS_SITE_ID ?? "lata-test";
+const CMS_SITE_ID = process.env.NEXT_PUBLIC_CMS_SITE_ID ?? "bd71shop";
 const CMS_API_KEY = process.env.NEXT_PUBLIC_CMS_API_KEY ?? "";
 
 // ===== Types =====
