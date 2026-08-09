@@ -15,7 +15,7 @@ export async function fetchProductBySlug(slug: string) {
       `${CMS_API}/api/v1/sites/${CMS_SITE_ID}/products?pageSize=500`,
       {
         headers: { "Content-Type": "application/json", "X-API-Key": CMS_API_KEY },
-        next: { revalidate: false, tags: [`product-${slug}`] },
+        next: { revalidate: 60, tags: [`product-${slug}`] },
       }
     );
     const json = await res.json();
@@ -35,7 +35,7 @@ export async function fetchPostBySlug(slug: string) {
       `${CMS_API}/api/v1/sites/${CMS_SITE_ID}/posts?pageSize=200`,
       {
         headers: { "Content-Type": "application/json", "X-API-Key": CMS_API_KEY },
-        next: { revalidate: false, tags: [`post-${slug}`] },
+        next: { revalidate: 60, tags: [`post-${slug}`] },
       }
     );
     const json = await res.json();
@@ -56,7 +56,7 @@ export async function fetchAllProducts(): Promise<any[]> {
       `${CMS_API}/api/v1/sites/${CMS_SITE_ID}/products?pageSize=500`,
       {
         headers: { "Content-Type": "application/json", "X-API-Key": CMS_API_KEY },
-        next: { revalidate: false, tags: ["all-products"] },
+        next: { revalidate: 60, tags: ["all-products"] },
       }
     );
     const json = await res.json();
@@ -73,7 +73,7 @@ export async function fetchAllPosts(): Promise<any[]> {
       `${CMS_API}/api/v1/sites/${CMS_SITE_ID}/posts?pageSize=200`,
       {
         headers: { "Content-Type": "application/json", "X-API-Key": CMS_API_KEY },
-        next: { revalidate: false, tags: ["all-posts"] },
+        next: { revalidate: 60, tags: ["all-posts"] },
       }
     );
     const json = await res.json();
@@ -90,7 +90,7 @@ export async function fetchCategories(): Promise<any[]> {
       `${CMS_API}/api/v1/sites/${CMS_SITE_ID}/categories?include_counts=1`,
       {
         headers: { "Content-Type": "application/json", "X-API-Key": CMS_API_KEY },
-        next: { revalidate: false, tags: ["categories"] },
+        next: { revalidate: 60, tags: ["categories"] },
       }
     );
     const json = await res.json();
