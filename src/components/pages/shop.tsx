@@ -21,14 +21,27 @@ const sortOptions = [
   { value: "price-high", label: "Sort by price: high to low" },
 ];
 
-export function ShopPage() {
+interface ShopPageProps {
+  serverProducts?: Product[];
+  serverCategories?: any[];
+}
+
+export function ShopPage({ serverProducts, serverCategories }: ShopPageProps = {}) {
   const navigate = useRouter((s) => s.navigate);
   const params = useRouter((s) => s.params);
-  // Use products from the store (real DB data), fall back to hardcoded if empty
+  // Priority: serverProducts prop (from SSR) > store products > hardcoded fallback
   const storeProducts = useRouter((s) => s.products);
   const storeCategories = useRouter((s) => s.categories);
-  const products = storeProducts.length > 0 ? storeProducts : hardcodedProducts;
-  const categories = storeCategories.length > 0 ? storeCategories : hardcodedCategories;
+  const products = serverProducts && serverProducts.length > 0
+    ? serverProducts
+    : storeProducts.length > 0
+      ? storeProducts
+      : hardcodedProducts;
+  const categories = serverCategories && serverCategories.length > 0
+    ? serverCategories
+    : storeCategories.length > 0
+      ? storeCategories
+      : hardcodedCategories;
   const [selectedCategory, setSelectedCategory] = useState<string>(params.category || "all");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("latest");
