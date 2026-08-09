@@ -1,24 +1,29 @@
 import { getServerData } from "@/lib/server-data";
-import { AppShell } from "@/components/site/app-shell";
+import { HomePage } from "@/components/pages/home";
+import { mapProduct, mapPost } from "@/lib/store";
 
 // =====================================================
 // Root page — Server Component
 // =====================================================
-// Pre-fetches all data on the Next.js server and passes it to
-// the client AppShell via TWO mechanisms:
-//   1. serverData prop — available synchronously during SSR
-//      so the first render has real product data (with images)
-//   2. window.__INITIAL_DATA__ — for other pages that don't
-//      receive the prop (ShopSSR, BlogSSR, etc.)
+// Fetches data on the server and passes it DIRECTLY to HomePage
+// as props. This ensures the SSR HTML has real product data
+// (with Supabase image URLs) instead of emoji fallbacks.
+//
+// Also injects window.__INITIAL_DATA__ for other components
+// (header, footer, cart drawer) that read from the store.
 // =====================================================
 
-export const revalidate = 60; // ISR — refresh every 60s
+export const revalidate = 60;
 
 export default async function Page() {
-  // Fetch data on the server
   const serverData = await getServerData();
 
-  // Pass to client via inline script (global variable)
+  // Map products/posts to the format HomePage expects
+  const products = (serverData.products || []).map(mapProduct);
+  const blogPosts = (serverData.blogPosts || []).map(mapPost);
+  const categories = serverData.categories || [];
+
+  // Also inject into window.__INITIAL_DATA__ for the store
   const initialDataScript = (
     <script
       dangerouslySetInnerHTML={{
@@ -30,7 +35,9 @@ export default async function Page() {
   return (
     <>
       {initialDataScript}
-      <AppShell serverData={serverData} />
+      <HomePage
+        serverData={{ products, blogPosts, categories }}
+      />
     </>
   );
 }
