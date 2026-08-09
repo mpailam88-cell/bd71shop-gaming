@@ -309,7 +309,8 @@ export function mapPost(p: any): BlogPost {
   }
 
   // Calculate read time from content length
-  const wordCount = (p.content || "").replace(/<[^>]*>/g, "").split(/\s+/).length;
+  const contentStr = typeof p.content === "string" ? p.content : (Array.isArray(p.content) ? p.content.map((s: any) => typeof s === "string" ? s : (s?.body || s?.heading || "")).join(" ") : String(p.content || ""));
+  const wordCount = contentStr.replace(/<[^>]*>/g, "").split(/\s+/).length;
   const readTime = `${Math.max(1, Math.ceil(wordCount / 200))} min read`;
 
   return {
