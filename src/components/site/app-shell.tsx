@@ -131,7 +131,7 @@ export function AppShell({ serverData }: { serverData?: any }) {
 
   const renderPage = () => {
     switch (page) {
-      case "home": return <HomePage />;
+      case "home": return <HomePage serverData={serverData} />;
       case "shop": return <ShopPage />;
       case "product": return <ProductDetailPage />;
       case "cart": return <CartPage />;
@@ -146,7 +146,7 @@ export function AppShell({ serverData }: { serverData?: any }) {
       case "disclaimer": return <LegalPage page="disclaimer" />;
       case "account": return <AccountPage />;
       case "not-found": return <NotFoundPage />;
-      default: return <HomePage />;
+      default: return <HomePage serverData={serverData} />;
     }
   };
 

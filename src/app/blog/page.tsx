@@ -1,25 +1,20 @@
 import type { Metadata } from "next";
+import { fetchAllPosts } from "@/lib/seo-fetchers";
 import { BlogSSR } from "./blog-ssr-client";
+import { getSiteName } from "@/lib/site-name";
 
-// =====================================================
-// /blog — Server-Rendered Blog Listing (SEO)
-// =====================================================
+export const revalidate = 60;
 
-export const revalidate = 60; // No ISR — on-demand revalidation only
+export async function generateMetadata(): Promise<Metadata> {
+  const siteName = await getSiteName();
+  return {
+    title: `Blog — ${siteName}`,
+    description: "Latest articles, guides, and news from BD71SHOP.",
+    alternates: { canonical: "/blog" },
+  };
+}
 
-export const metadata: Metadata = {
-  title: "Pet Care Blog",
-  description:
-    "Expert pet care tips, nutrition guides, product reviews, and heartwarming stories. Learn how to keep your cats, dogs, and other pets happy and healthy.",
-  alternates: { canonical: "/blog" },
-  openGraph: {
-    title: "Pet Care Blog",
-    description: "Expert pet care tips, nutrition guides, product reviews, and pet stories.",
-    url: "/blog",
-    type: "website",
-  },
-};
-
-export default function BlogPage() {
-  return <BlogSSR />;
+export default async function BlogPage() {
+  const posts = await fetchAllPosts();
+  return <BlogSSR serverPosts={posts} />;
 }

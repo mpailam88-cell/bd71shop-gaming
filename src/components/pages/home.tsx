@@ -14,13 +14,22 @@ import {
 } from "@/lib/data";
 import { ProductCard } from "@/components/site/product-card";
 
-export function HomePage() {
+export function HomePage({ serverData }: { serverData?: any }) {
   const navigate = useRouter((s) => s.navigate);
   const addItem = useCart((s) => s.addItem);
-  // Use real DB data from the store, fall back to hardcoded if empty
-  const products = useRouter((s) => s.products.length > 0 ? s.products : hardcodedProducts);
-  const blogPosts = useRouter((s) => s.blogPosts.length > 0 ? s.blogPosts : hardcodedBlogPosts);
-  const categories = useRouter((s) => s.categories.length > 0 ? s.categories : hardcodedCategories);
+  // Use serverData prop (from SSR) first, then store, then hardcoded fallback
+  const storeProducts = useRouter((s) => s.products);
+  const storeBlogPosts = useRouter((s) => s.blogPosts);
+  const storeCategories = useRouter((s) => s.categories);
+  const products = (serverData?.products && serverData.products.length > 0)
+    ? serverData.products
+    : (storeProducts.length > 0 ? storeProducts : hardcodedProducts);
+  const blogPosts = (serverData?.blogPosts && serverData.blogPosts.length > 0)
+    ? serverData.blogPosts
+    : (storeBlogPosts.length > 0 ? storeBlogPosts : hardcodedBlogPosts);
+  const categories = (serverData?.categories && serverData.categories.length > 0)
+    ? serverData.categories
+    : (storeCategories.length > 0 ? storeCategories : hardcodedCategories);
   const deals = products.filter((p: any) => (p as any).featured === "deals").slice(0, 8);
   const popular = products.filter((p: any) => (p as any).featured === "popular").slice(0, 4);
   const bestsellers = products.filter((p: any) => (p as any).featured === "bestseller").slice(0, 4);

@@ -7,13 +7,19 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "@/lib/store";
-import { blogPosts } from "@/lib/data";
+import { blogPosts as hardcodedBlogPosts } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 const categoriesList = ["All", "Gift Cards", "Amazon", "Apple", "Google Play", "Gaming", "Bangladesh", "Crypto", "Legal"];
 
-export function BlogPage() {
+interface BlogPageProps {
+  serverPosts?: any[];
+}
+
+export function BlogPage({ serverPosts }: BlogPageProps = {}) {
   const navigate = useRouter((s) => s.navigate);
+  const storeBlogPosts = useRouter((s) => s.blogPosts);
+  const blogPosts = (serverPosts && serverPosts.length > 0) ? serverPosts : (storeBlogPosts.length > 0 ? storeBlogPosts : hardcodedBlogPosts);
   const [activeCategory, setActiveCategory] = useState("All");
   const [search, setSearch] = useState("");
 
