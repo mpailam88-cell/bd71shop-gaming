@@ -14,22 +14,37 @@ import {
 } from "@/lib/data";
 import { ProductCard } from "@/components/site/product-card";
 
+// Read window.__INITIAL_DATA__ synchronously (available before React hydrates)
+function getInitialData() {
+  if (typeof window !== "undefined" && (window as any).__INITIAL_DATA__) {
+    return (window as any).__INITIAL_DATA__;
+  }
+  return null;
+}
+
 export function HomePage({ serverData }: { serverData?: any }) {
   const navigate = useRouter((s) => s.navigate);
   const addItem = useCart((s) => s.addItem);
-  // Use serverData prop (from SSR) first, then store, then hardcoded fallback
+  // Priority: serverData prop > window.__INITIAL_DATA__ > store > hardcoded
+  const initialData = getInitialData();
   const storeProducts = useRouter((s) => s.products);
   const storeBlogPosts = useRouter((s) => s.blogPosts);
   const storeCategories = useRouter((s) => s.categories);
   const products = (serverData?.products && serverData.products.length > 0)
     ? serverData.products
-    : (storeProducts.length > 0 ? storeProducts : hardcodedProducts);
+    : (initialData?.products && initialData.products.length > 0)
+      ? initialData.products
+      : (storeProducts.length > 0 ? storeProducts : hardcodedProducts);
   const blogPosts = (serverData?.blogPosts && serverData.blogPosts.length > 0)
     ? serverData.blogPosts
-    : (storeBlogPosts.length > 0 ? storeBlogPosts : hardcodedBlogPosts);
+    : (initialData?.blogPosts && initialData.blogPosts.length > 0)
+      ? initialData.blogPosts
+      : (storeBlogPosts.length > 0 ? storeBlogPosts : hardcodedBlogPosts);
   const categories = (serverData?.categories && serverData.categories.length > 0)
     ? serverData.categories
-    : (storeCategories.length > 0 ? storeCategories : hardcodedCategories);
+    : (initialData?.categories && initialData.categories.length > 0)
+      ? initialData.categories
+      : (storeCategories.length > 0 ? storeCategories : hardcodedCategories);
   const deals = products.filter((p: any) => (p as any).featured === "deals").slice(0, 8);
   const popular = products.filter((p: any) => (p as any).featured === "popular").slice(0, 4);
   const bestsellers = products.filter((p: any) => (p as any).featured === "bestseller").slice(0, 4);
