@@ -9,10 +9,8 @@ interface BlogSSRProps {
 }
 
 export function BlogSSR({ serverPosts }: BlogSSRProps) {
-  // Map posts for the BlogPage component
   const mappedPosts = (serverPosts || []).map(mapPost);
 
-  // Also inject into store for other components
   useEffect(() => {
     if (mappedPosts.length > 0 && useRouter.getState().blogPosts.length === 0) {
       useRouter.setState({ blogPosts: mappedPosts, dataLoaded: true });

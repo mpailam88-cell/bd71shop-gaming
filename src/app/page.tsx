@@ -13,7 +13,7 @@ import { mapProduct, mapPost } from "@/lib/store";
 // (header, footer, cart drawer) that read from the store.
 // =====================================================
 
-export const revalidate = 60;
+export const revalidate = 31536000;
 
 export default async function Page() {
   const serverData = await getServerData();

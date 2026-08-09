@@ -137,8 +137,14 @@ export function BlogPage({ serverPosts }: BlogPageProps = {}) {
                 onClick={() => navigate("blog-single", { blogSlug: post.slug || String(post.id) })}
                 className="group bg-card rounded-2xl overflow-hidden border border-border/60 shadow-card hover:shadow-neon transition-all duration-300 hover:-translate-y-1 flex flex-col text-left"
               >
-                <div className={`relative h-44 bg-gradient-to-br ${post.gradient} overflow-hidden flex items-center justify-center`}>
-                  <span className="text-6xl drop-shadow-lg group-hover:scale-110 transition-transform duration-500">{post.emoji}</span>
+                <div className={`relative h-44 bg-gradient-to-br ${post.gradient || "from-neon/20 to-cyber/10"} overflow-hidden`}>
+                  {post.cover_image ? (
+                    <img src={post.cover_image} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-6xl drop-shadow-lg">{post.emoji || "📰"}</span>
+                    </div>
+                  )}
                   <Badge className="absolute top-3 left-3 bg-card/90 text-foreground border-0 text-[11px] font-semibold">{post.category}</Badge>
                 </div>
                 <div className="p-5 flex-1 flex flex-col">

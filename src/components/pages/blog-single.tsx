@@ -81,9 +81,15 @@ export function BlogSinglePage() {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className={`relative h-64 sm:h-80 lg:h-96 bg-gradient-to-br ${post.gradient} rounded-3xl overflow-hidden flex items-center justify-center mb-8`}
+          className={`relative h-64 sm:h-80 lg:h-96 bg-gradient-to-br ${post.gradient || "from-neon/20 to-cyber/10"} rounded-3xl overflow-hidden mb-8`}
         >
-          <span className="text-[160px] sm:text-[200px] drop-shadow-2xl select-none">{post.emoji}</span>
+          {post.cover_image ? (
+            <img src={post.cover_image} alt={post.title} className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <span className="text-[160px] sm:text-[200px] drop-shadow-2xl select-none">{post.emoji || "📰"}</span>
+            </div>
+          )}
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-6 right-6 h-32 w-32 rounded-full border-2 border-dashed border-foreground/20" />
             <div className="absolute bottom-6 left-6 h-20 w-20 rounded-full border-2 border-dashed border-foreground/15" />

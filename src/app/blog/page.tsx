@@ -3,7 +3,7 @@ import { fetchAllPosts } from "@/lib/seo-fetchers";
 import { BlogSSR } from "./blog-ssr-client";
 import { getSiteName } from "@/lib/site-name";
 
-export const revalidate = 60;
+export const revalidate = 31536000;
 
 export async function generateMetadata(): Promise<Metadata> {
   const siteName = await getSiteName();

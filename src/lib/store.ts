@@ -251,7 +251,7 @@ export function mapProduct(p: any): Product {
   let categoryName = p.category_name || "Uncategorized";
 
   return {
-    id: parseInt(p.id?.replace(/-/g, "").slice(0, 8), 16) || Math.floor(Math.random() * 1000000),
+    id: parseInt(String(p.id || "").replace(/-/g, "").slice(0, 8), 16) || Math.floor(Math.random() * 1000000),
     name: p.name || "Unnamed Product",
     brand: tags[0] || "BD71",
     price: p.sale_price || p.base_price || 0,
@@ -313,7 +313,7 @@ export function mapPost(p: any): BlogPost {
   const readTime = `${Math.max(1, Math.ceil(wordCount / 200))} min read`;
 
   return {
-    id: parseInt(p.id?.replace(/-/g, "").slice(0, 8), 16) || Math.floor(Math.random() * 1000000),
+    id: parseInt(String(p.id || "").replace(/-/g, "").slice(0, 8), 16) || Math.floor(Math.random() * 1000000),
     category: p.tags?.[0] || "Pet Care",
     title: p.title || "Untitled",
     excerpt: p.excerpt?.replace(/<[^>]*>/g, "").trim() || "",
