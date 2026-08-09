@@ -44,7 +44,7 @@ async function serverFetch<T>(path: string): Promise<T> {
         "Content-Type": "application/json",
         "X-API-Key": CMS_API_KEY,
       },
-      next: { revalidate: false }, // ISR — cache for 1 hour
+      next: { revalidate: 60 }, // ISR — cache for 1 hour
     }
   );
   const json = await res.json();
