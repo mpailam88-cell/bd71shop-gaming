@@ -54,9 +54,24 @@ const PATH_TO_PAGE: Record<string, { page: string; params?: any }> = {
   "/account": { page: "account" },
 };
 
-export function AppShell() {
+export function AppShell({ serverData }: { serverData?: any }) {
   const page = useRouter((s) => s.page);
   const loadData = useRouter((s) => s.loadData);
+
+  // If serverData is provided (from SSR), inject into store SYNCHRONOUSLY
+  // before first render so product images show in the SSR HTML.
+  // This runs on every render but is idempotent (only sets if store is empty).
+  if (serverData && serverData.products && serverData.products.length > 0) {
+    const currentState = useRouter.getState();
+    if (currentState.products.length === 0) {
+      useRouter.setState({
+        products: serverData.products,
+        blogPosts: serverData.blogPosts ?? [],
+        categories: serverData.categories ?? [],
+        dataLoaded: true,
+      });
+    }
+  }
 
   // Load CMS data on mount — reads from window.__INITIAL_DATA__
   // (set by the server component) so data is available instantly.
