@@ -182,6 +182,25 @@ function getInitialStoreState() {
     };
   }
 
+  // PRIORITY 1: Check window.__INITIAL_DATA__ (set by server component)
+  // This is available synchronously before React hydrates, so the first
+  // render will have real product data (with featured_image URLs).
+  if ((window as any).__INITIAL_DATA__) {
+    const initial = (window as any).__INITIAL_DATA__;
+    if (initial.products && initial.products.length > 0) {
+      const products = initial.products as Product[];
+      const blogPosts = (initial.blogPosts ?? []) as BlogPost[];
+      const categories = initial.categories ?? buildCategories(null, products);
+      return {
+        products,
+        blogPosts,
+        categories,
+        dataLoaded: true,
+      };
+    }
+  }
+
+  // PRIORITY 2: Check localStorage cache (from previous visit)
   const cachedProducts = loadFromCache<Product[]>(CACHE_KEY_PRODUCTS);
   const cachedPosts = loadFromCache<BlogPost[]>(CACHE_KEY_POSTS);
   const cachedCats = loadFromCache<StoreCategory[]>(CACHE_KEY_CATEGORIES);
