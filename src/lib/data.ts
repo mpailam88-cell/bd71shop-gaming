@@ -79,6 +79,18 @@ export type Product = {
   tag?: string;
   badge?: string;
   featured?: "deals" | "popular" | "bestseller" | "new";
+  // Fields added for real DB data (populated by mapProduct in store.ts)
+  slug?: string;
+  featured_image?: string;
+  category?: string;
+  categoryName?: string;
+  brand?: string;
+  description?: string;
+  shortDescription?: string;
+  images?: string[];
+  inStock?: boolean;
+  sku?: string;
+  weight?: string;
 };
 
 export const products: Product[] = [
@@ -164,6 +176,15 @@ export type BlogPost = {
   gradient: string;
   category: string;
   excerpt: string;
+  // Fields added for real DB data (populated by mapPost in store.ts)
+  slug?: string;
+  content?: any;
+  readTime?: string;
+  comments?: number;
+  author?: string;
+  bg?: string;
+  cover_image?: string;
+  seo?: any;
 };
 
 export const blogPosts: BlogPost[] = [

@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ProductCard } from "@/components/site/product-card";
 import { useRouter } from "@/lib/store";
-import { products, categories, formatPrice, type Product } from "@/lib/data";
+import { products as hardcodedProducts, categories as hardcodedCategories, formatPrice, type Product } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 const sortOptions = [
@@ -24,6 +24,11 @@ const sortOptions = [
 export function ShopPage() {
   const navigate = useRouter((s) => s.navigate);
   const params = useRouter((s) => s.params);
+  // Use products from the store (real DB data), fall back to hardcoded if empty
+  const storeProducts = useRouter((s) => s.products);
+  const storeCategories = useRouter((s) => s.categories);
+  const products = storeProducts.length > 0 ? storeProducts : hardcodedProducts;
+  const categories = storeCategories.length > 0 ? storeCategories : hardcodedCategories;
   const [selectedCategory, setSelectedCategory] = useState<string>(params.category || "all");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("latest");

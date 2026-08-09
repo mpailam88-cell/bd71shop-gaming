@@ -57,7 +57,7 @@ export function BlogPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          onClick={() => navigate("blog-single", { blogId: featured.id })}
+          onClick={() => navigate("blog-single", { blogSlug: featured.slug || String(featured.id) })}
           className="group w-full bg-card rounded-3xl border border-border/60 overflow-hidden hover:shadow-neon transition-all mb-10 text-left"
         >
           <div className="grid lg:grid-cols-2">
@@ -128,7 +128,7 @@ export function BlogPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: i * 0.06 }}
-                onClick={() => navigate("blog-single", { blogId: post.id })}
+                onClick={() => navigate("blog-single", { blogSlug: post.slug || String(post.id) })}
                 className="group bg-card rounded-2xl overflow-hidden border border-border/60 shadow-card hover:shadow-neon transition-all duration-300 hover:-translate-y-1 flex flex-col text-left"
               >
                 <div className={`relative h-44 bg-gradient-to-br ${post.gradient} overflow-hidden flex items-center justify-center`}>

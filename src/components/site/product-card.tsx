@@ -29,7 +29,8 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
     setTimeout(() => setAdded(false), 1800);
   };
 
-  const goToProduct = () => navigate("product", { productId: product.id });
+  // FIX: use productSlug (not productId) so pageToUrl generates /product/[slug]
+  const goToProduct = () => navigate("product", { productSlug: product.slug || String(product.id) });
 
   return (
     <motion.div
@@ -66,10 +67,29 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
           </Badge>
         )}
 
+        {/* Show real product image if available, otherwise fall back to emoji */}
+        {product.featured_image ? (
+          <img
+            src={product.featured_image}
+            alt={product.name}
+            className="w-full h-full object-cover"
+            loading="lazy"
+            onError={(e) => {
+              // If image fails to load, hide it and show emoji fallback
+              (e.target as HTMLImageElement).style.display = "none";
+              const fallback = (e.target as HTMLImageElement).nextElementSibling as HTMLElement;
+              if (fallback) fallback.style.display = "flex";
+            }}
+          />
+        ) : null}
+        {/* Emoji fallback (shown if no image OR image fails to load) */}
         <motion.div
           animate={hover ? { scale: 1.1, rotate: 3 } : { scale: 1, rotate: 0 }}
           transition={{ duration: 0.3 }}
-          className="text-6xl sm:text-7xl drop-shadow-2xl select-none"
+          className={cn(
+            "text-6xl sm:text-7xl drop-shadow-2xl select-none",
+            product.featured_image ? "hidden" : ""
+          )}
           aria-hidden="true"
         >
           {product.emoji}

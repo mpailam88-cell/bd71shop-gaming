@@ -10,22 +10,28 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useRouter, useCart } from "@/lib/store";
 import {
-  siteInfo, categories, products, blogPosts, getFeaturedProducts, formatPrice,
+  siteInfo, categories as hardcodedCategories, products as hardcodedProducts, blogPosts as hardcodedBlogPosts, getFeaturedProducts, formatPrice,
 } from "@/lib/data";
 import { ProductCard } from "@/components/site/product-card";
 
 export function HomePage() {
   const navigate = useRouter((s) => s.navigate);
   const addItem = useCart((s) => s.addItem);
-  const deals = getFeaturedProducts("deals");
-  const popular = getFeaturedProducts("popular");
-  const bestsellers = getFeaturedProducts("bestseller");
+  // Use real DB data from the store, fall back to hardcoded if empty
+  const products = useRouter((s) => s.products.length > 0 ? s.products : hardcodedProducts);
+  const blogPosts = useRouter((s) => s.blogPosts.length > 0 ? s.blogPosts : hardcodedBlogPosts);
+  const categories = useRouter((s) => s.categories.length > 0 ? s.categories : hardcodedCategories);
+  const deals = products.filter((p: any) => (p as any).featured === "deals").slice(0, 8);
+  const popular = products.filter((p: any) => (p as any).featured === "popular").slice(0, 4);
+  const bestsellers = products.filter((p: any) => (p as any).featured === "bestseller").slice(0, 4);
+  // If no hardcoded featured data, use first products as deals
+  const realDeals = deals.length > 0 ? deals : products.slice(0, 8);
   const topCategories = ["google-play", "apple", "amazon", "steam", "free-fire", "pubg"];
   const recentBlogs = blogPosts.slice(0, 6);
 
-  // Featured hero deal (FF Airdrop — best discount)
-  const heroDeal = products.find((p) => p.id === 12) || deals[0];
-  const secondaryDeal = products.find((p) => p.id === 4) || deals[1];
+  // Featured hero deal
+  const heroDeal = realDeals[0];
+  const secondaryDeal = realDeals[1] || realDeals[0];
 
   const handleHeroBuyNow = () => {
     if (!heroDeal) return;
